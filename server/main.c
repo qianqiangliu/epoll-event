@@ -30,6 +30,7 @@ void read_cb(poll_event_t * poll_event, poll_event_element_t * node,
 	if (read_num > 0) {
 		read_flag = 1;
 		/* if we actually get data, print it */
+		read_buf[read_num] = '\0';	/* null terminal */
 		fprintf(stdout, "received data: %s\n", read_buf);
 	}
 }

@@ -1,9 +1,10 @@
-CC = gcc -fPIC -g
-LDFLAGS = -lm
+CC = gcc
+EXE = server
+LDFLAGS =
 
 # set DEBUG options
 ifdef DEBUG
-	CFLAGS = -Wall -Wextra -ggdb -pg -DDEBUG 
+	CFLAGS = -Wall -Wextra -ggdb -pg -DDEBUG
 else
 	CFLAGS = -Wall -O2 
 endif
@@ -11,10 +12,10 @@ endif
 # name all the object files
 OBJS = main.o poll.o socket.o
 
-all: epoll
+all: $(EXE)
 
-epoll: $(OBJS)
-	$(CC) $(LDFLAGS) -o server $^
+$(EXE): $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ $^
 
 debug:
 	make all DEBUG=1
@@ -23,4 +24,4 @@ debug:
 	$(CC) $(CFLAGS) -o $@ -c $^
 
 clean:
-	rm -rf $(OBJS) server
+	rm -rf $(OBJS) $(EXE)

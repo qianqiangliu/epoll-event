@@ -78,7 +78,6 @@ poll_event_element_t *poll_event_element_new(int, uint32_t);
  */
 void poll_event_element_delete(poll_event_element_t *);
 
-// poll_event function
 /**
  * Function to create a new poll event object
  * @param timeout timeout for the pollevent

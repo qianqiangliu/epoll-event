@@ -1,9 +1,4 @@
 #include <stdlib.h>
-#include <sys/epoll.h>
-#include <fcntl.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <string.h>
 #include <unistd.h>
 
 #include "poll.h"
@@ -69,7 +64,6 @@ poll_event_t *poll_event_new(int timeout)
 void poll_event_delete(poll_event_t * poll_event)
 {
 	INFO("deleting a poll_event");
-	//hash_table_delete(poll_event->table);
 	close(poll_event->epoll_fd);
 	free(poll_event);
 }
@@ -136,9 +130,9 @@ int poll_event_remove(poll_event_t * poll_event, int fd)
  */
 int poll_event_process(poll_event_t * poll_event)
 {
+	int i;
 	struct epoll_event events[MAX_EVENTS];
 
-	INFO("May the source be with you!!");
 	int fds = epoll_wait(poll_event->epoll_fd, events, MAX_EVENTS, poll_event->timeout);
 	if (fds == 0) {
 		INFO("event loop timed out");
@@ -148,8 +142,6 @@ int poll_event_process(poll_event_t * poll_event)
 			}
 		}
 	}
-
-	int i;
 
 	for (i = 0; i < fds; i++) {
 		poll_event_element_t *value = NULL;

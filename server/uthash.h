@@ -1,5 +1,5 @@
-#ifndef UTHASH_H
-#define UTHASH_H
+#ifndef _UTHASH_H
+#define _UTHASH_H
 
 #include <string.h>				/* memcmp, strlen */
 #include <stddef.h>				/* ptrdiff_t */
@@ -896,15 +896,15 @@ typedef struct UT_hash_bucket {
 } UT_hash_bucket;
 
 /* random signature used only to find hash tables in external analysis */
-#define HASH_SIGNATURE 0xa0111fe1
-#define HASH_BLOOM_SIGNATURE 0xb12220f2
+#define HASH_SIGNATURE			0xa0111fe1
+#define HASH_BLOOM_SIGNATURE	0xb12220f2
 
 typedef struct UT_hash_table {
 	UT_hash_bucket *buckets;
 	unsigned num_buckets, log2_num_buckets;
 	unsigned num_items;
 	struct UT_hash_handle *tail;	/* tail hh in app order, for fast append    */
-	ptrdiff_t hho;				/* hash handle offset (byte pos of hash handle in element */
+	ptrdiff_t hho;					/* hash handle offset (byte pos of hash handle in element */
 
 	/* in an ideal situation (all buckets used equally), no bucket would have
 	 * more than ceil(#items/#buckets) items. that's the ideal chain length. */
@@ -934,13 +934,13 @@ typedef struct UT_hash_table {
 
 typedef struct UT_hash_handle {
 	struct UT_hash_table *tbl;
-	void *prev;					/* prev element in app order      */
-	void *next;					/* next element in app order      */
+	void *prev;						/* prev element in app order      */
+	void *next;						/* next element in app order      */
 	struct UT_hash_handle *hh_prev;	/* previous hh in bucket order    */
 	struct UT_hash_handle *hh_next;	/* next hh in bucket order        */
-	void *key;					/* ptr to enclosing struct's key  */
-	unsigned keylen;			/* enclosing struct's key len     */
-	unsigned hashv;				/* result of hash-fcn(key)        */
+	void *key;						/* ptr to enclosing struct's key  */
+	unsigned keylen;				/* enclosing struct's key len     */
+	unsigned hashv;					/* result of hash-fcn(key)        */
 } UT_hash_handle;
 
-#endif	/* UTHASH_H */
+#endif	/* _UTHASH_H */
