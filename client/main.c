@@ -20,7 +20,7 @@
 void connect_flood(int loop)
 {
 	char *host = "127.0.0.1";
-	int port = 8080;
+	int port = 1991;
 	struct sockaddr_in servaddr;
 	int sockfd;
 
@@ -47,7 +47,7 @@ void connect_flood(int loop)
 void request_flood(int loop)
 {
 	char *host = "127.0.0.1";
-	int port = 8080;
+	int port = 1991;
 	struct sockaddr_in servaddr;
 	char *split = "\r\n";
 	char *cmd = "GET";
@@ -83,7 +83,7 @@ void request_flood(int loop)
 
 	for (i = 0; i < loop; i++) {
 		if (write(sockfd, msg, sizeof(msg)) == -1)
-			printf("\n** write_1**\n");
+			perror("write");
 	}
 	time_t end = clock();
 	double cost = (double)(end - start) / CLOCKS_PER_SEC;
