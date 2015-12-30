@@ -110,4 +110,3 @@ int socket_accept(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen)
 	}
 	return connfd;
 }
-

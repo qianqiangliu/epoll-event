@@ -943,4 +943,4 @@ typedef struct UT_hash_handle {
 	unsigned hashv;				/* result of hash-fcn(key)        */
 } UT_hash_handle;
 
-#endif /* UTHASH_H */
+#endif	/* UTHASH_H */
