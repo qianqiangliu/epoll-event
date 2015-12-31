@@ -10,7 +10,7 @@ else
 endif
 
 # name all the object files
-OBJS = main.o poll.o socket.o
+OBJS = main.o poll.o socket.o readn.o writen.o
 
 all: $(EXE)
 

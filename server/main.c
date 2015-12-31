@@ -1,12 +1,11 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
 #include <netinet/in.h>
 
 #include "poll.h"
 #include "debug.h"
 #include "socket.h"
+#include "readn.h"
+#include "writen.h"
 
 #define BUFFSIZE	1024
 
@@ -25,7 +24,7 @@ void read_cb(poll_event_t * poll_event, poll_event_element_t * node,
 	INFO("in read_cb");
 
 	/* we just read data and print */
-	read_num = read(node->fd, read_buf, BUFFSIZE);
+	read_num = readn(node->fd, read_buf, BUFFSIZE);
 
 	if (read_num > 0) {
 		read_flag = 1;
@@ -44,8 +43,7 @@ void write_cb(poll_event_t * poll_event, poll_event_element_t * node,
 
 	if (read_flag) {
 		read_flag = 0;
-		if (write(node->fd, read_buf, read_num) == -1)
-			perror("write");
+		writen(node->fd, read_buf, read_num);
 	}
 }
 
