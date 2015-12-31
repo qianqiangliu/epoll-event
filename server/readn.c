@@ -10,9 +10,8 @@ ssize_t readn(int fd, void *vptr, size_t n)
 
 	while (nleft > 0) {
 		if ((nread = read(fd, ptr, nleft)) < 0) {
-			if (errno == EINTR)
-				nread = 0;				/* and call read() again */
-			else if (errno == EAGAIN)	/* read all data */
+			/* read all data */
+			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				break;
 			else
 				return -1;
