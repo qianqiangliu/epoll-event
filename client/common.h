@@ -1,4 +1,4 @@
-static int Socket(int family, int type, int protocol)
+int Socket(int family, int type, int protocol)
 {
 	int sockfd;
 
@@ -9,7 +9,7 @@ static int Socket(int family, int type, int protocol)
 	return sockfd;
 }
 
-static int Connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen)
+int Connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen)
 {
 	if ((connect(sockfd, servaddr, addrlen)) == -1) {
 		perror("server is not open or connect:");
@@ -19,7 +19,7 @@ static int Connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrle
 	return 0;
 }
 
-static int Bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen)
+int Bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen)
 {
 	if ((bind(sockfd, myaddr, addrlen)) == -1) {
 		perror("binding:");
@@ -28,7 +28,7 @@ static int Bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen)
 	return 0;
 }
 
-static int Listen(int sockfd, int backlog)
+int Listen(int sockfd, int backlog)
 {
 	if ((listen(sockfd, backlog)) == -1) {
 		perror("listen:");
@@ -37,7 +37,7 @@ static int Listen(int sockfd, int backlog)
 	return 0;
 }
 
-static int Accept(int sockfd, struct sockaddr *cliaddr, socklen_t addrlen)
+int Accept(int sockfd, struct sockaddr *cliaddr, socklen_t addrlen)
 {
 	int n;
 

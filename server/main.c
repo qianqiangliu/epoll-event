@@ -1,19 +1,15 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <netinet/in.h>
 
 #include "poll.h"
 #include "debug.h"
 #include "socket.h"
-#include "readn.h"
 #include "writen.h"
 
 #define BUFFSIZE	1024
 
 #define UNUSED_PARAMS(x) (void)x
-
-static char read_buf[BUFFSIZE];
-static int read_flag;
-static int read_num;
 
 void read_cb(poll_event_t * poll_event, poll_event_element_t * node,
 			 struct epoll_event ev)
@@ -23,26 +19,16 @@ void read_cb(poll_event_t * poll_event, poll_event_element_t * node,
 	/* NOTE: read is also invoked on accept and connect */
 	INFO("in read_cb");
 
-	/* we just read data and print */
-	read_num = readn(node->fd, read_buf, BUFFSIZE);
+	char read_buf[BUFFSIZE];
+	int read_num;
+
+	read_num = read(node->fd, read_buf, BUFFSIZE - 1);
 
 	if (read_num > 0) {
-		read_flag = 1;
-		/* if we actually get data, print it */
+		/* if we actually get data, print it and write back */
 		read_buf[read_num] = '\0';	/* null terminal */
 		fprintf(stdout, "received data: %s\n", read_buf);
-	}
-}
 
-void write_cb(poll_event_t * poll_event, poll_event_element_t * node,
-			 struct epoll_event ev)
-{
-	UNUSED_PARAMS(poll_event);
-	UNUSED_PARAMS(ev);
-	INFO("in write_cb");
-
-	if (read_flag) {
-		read_flag = 0;
 		writen(node->fd, read_buf, read_num);
 	}
 }
@@ -72,14 +58,13 @@ void accept_cb(poll_event_t * poll_event, poll_event_element_t * node,
 	fprintf(stdout, "got the socket %d\n", connfd);
 
 	/* set flags to check */
-	uint32_t flags = EPOLLIN | EPOLLOUT | EPOLLET | EPOLLRDHUP;
+	uint32_t flags = EPOLLIN | EPOLLRDHUP;
 	poll_event_element_t *p;
 
 	/* add file descriptor to poll event */
 	poll_event_add(poll_event, connfd, flags, &p);
 	/* set function callbacks */
 	p->read_callback = read_cb;
-	p->write_callback = write_cb;
 	p->close_callback = close_cb;
 }
 

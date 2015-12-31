@@ -11,7 +11,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <time.h>
+#include <sys/time.h>
 
 #include "common.h"
 
@@ -24,9 +24,10 @@ void connect_flood(int loop)
 	struct sockaddr_in servaddr;
 	int sockfd;
 
-	time_t start = clock();
-	int i;
+	struct timeval start, end;
+	gettimeofday(&start, NULL);
 
+	int i;
 	for (i = 0; i < loop; i++) {
 		sockfd = Socket(AF_INET, SOCK_STREAM, 0);
 
@@ -38,10 +39,11 @@ void connect_flood(int loop)
 		Connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
 		close(sockfd);
 	}
-	time_t end = clock();
-	double cost = (double)(end - start) / CLOCKS_PER_SEC;
 
-	printf("connect: %d, cost %lf sec\n", loop, cost);
+	gettimeofday(&end, NULL);
+
+	int time_cost = 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
+	printf("connect: %d, cost %lf sec\n", loop, time_cost / 1000000.0);
 }
 
 void request_flood(int loop)
@@ -79,16 +81,18 @@ void request_flood(int loop)
 	Connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
 
 	int i;
-	time_t start = clock();
+	struct timeval start, end;
+	gettimeofday(&start, NULL);
 
 	for (i = 0; i < loop; i++) {
 		if (write(sockfd, msg, sizeof(msg)) == -1)
 			perror("write");
 	}
-	time_t end = clock();
-	double cost = (double)(end - start) / CLOCKS_PER_SEC;
 
-	printf("request: %d, costed: %lf sec\n", loop, cost);
+	gettimeofday(&end, NULL);
+
+	int time_cost = 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
+	printf("connect: %d, cost %lf sec\n", loop, time_cost / 1000000.0);
 }
 
 int main(int argc, char *argv[])
@@ -98,7 +102,7 @@ int main(int argc, char *argv[])
 		exit(0);
 	}
 
-	/* request_flood(atoi(argv[1])); */
+	request_flood(atoi(argv[1]));
 	connect_flood(atoi(argv[1]));
 
 	return 0;
