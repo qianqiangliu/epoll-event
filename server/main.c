@@ -74,7 +74,7 @@ void accept_cb(poll_event_t * poll_event, poll_event_element_t * node,
 	fprintf(stdout, "got the socket %d\n", connfd);
 
 	/* set flags to check */
-	uint32_t flags = EPOLLIN | EPOLLOUT | EPOLLRDHUP | EPOLLHUP;
+	uint32_t flags = EPOLLIN | EPOLLOUT | EPOLLET | EPOLLRDHUP;
 	poll_event_element_t *p;
 
 	/* add file descriptor to poll event */
@@ -105,6 +105,8 @@ int timeout_cb(poll_event_t * poll_event)
 int main()
 {
 	int sockfd;
+
+	/* create tcp socket */
 	sockfd = socket_create_and_bind("1991");
 	socket_set_non_blocking(sockfd);
 	socket_start_listening(sockfd);
@@ -121,6 +123,7 @@ int main()
 
 	/* set callbacks */
 	p->accept_callback = accept_cb;
+	p->close_callback = close_cb;
 
 	/* enable accept callback */
 	p->cb_flags |= ACCEPT_CB;

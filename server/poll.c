@@ -148,17 +148,14 @@ int poll_event_process(poll_event_t * poll_event)
 
 		HASH_FIND_INT(_nodes, &events[i].data.fd, value);
 		if (value) {
-			LOG("started processing for event id(%d) and sock(%d)", i,
-				events[i].data.fd);
+			LOG("started processing for event id(%d) and sock(%d)", i, events[i].data.fd);
 			/* when data avaliable for read or urgent flag is set */
 			if ((events[i].events & EPOLLIN) || (events[i].events & EPOLLPRI)) {
 				if (events[i].events & EPOLLIN) {
-					LOG("found EPOLLIN for event id(%d) and sock(%d)", i,
-						events[i].data.fd);
+					LOG("found EPOLLIN for event id(%d) and sock(%d)", i, events[i].data.fd);
 					value->cur_event &= EPOLLIN;
 				} else {
-					LOG("found EPOLLPRI for event id(%d) and sock(%d)", i,
-						events[i].data.fd);
+					LOG("found EPOLLPRI for event id(%d) and sock(%d)", i, events[i].data.fd);
 					value->cur_event &= EPOLLPRI;
 				}
 				/* connect or accept callbacks also go through EPOLLIN */
@@ -174,22 +171,18 @@ int poll_event_process(poll_event_t * poll_event)
 			}
 			/* when write possible */
 			if (events[i].events & EPOLLOUT) {
-				LOG("found EPOLLOUT for event id(%d) and sock(%d)", i,
-					events[i].data.fd);
+				LOG("found EPOLLOUT for event id(%d) and sock(%d)", i, events[i].data.fd);
 				value->cur_event &= EPOLLOUT;
 				if (value->write_callback)
 					value->write_callback(poll_event, value, events[i]);
 			}
 			/* shutdown or error */
-			if ((events[i].events & EPOLLRDHUP) || (events[i].events & EPOLLERR)
-				|| (events[i].events & EPOLLHUP)) {
+			if ((events[i].events & EPOLLRDHUP) || (events[i].events & EPOLLERR) || (events[i].events & EPOLLHUP)) {
 				if (events[i].events & EPOLLRDHUP) {
-					LOG("found EPOLLRDHUP for event id(%d) and sock(%d)", i,
-						events[i].data.fd);
+					LOG("found EPOLLRDHUP for event id(%d) and sock(%d)", i, events[i].data.fd);
 					value->cur_event &= EPOLLRDHUP;
 				} else {
-					LOG("found EPOLLERR for event id(%d) and sock(%d)", i,
-						events[i].data.fd);
+					LOG("found EPOLLERR for event id(%d) and sock(%d)", i, events[i].data.fd);
 					value->cur_event &= EPOLLERR;
 				}
 				if (value->close_callback)

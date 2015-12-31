@@ -21,15 +21,15 @@ struct poll_event_element {
 	/** the file descriptor*/
 	int fd;
 	/** callback for write */
-	 CALLBACK(write_callback);
+	CALLBACK(write_callback);
 	/** callback for read */
-	 CALLBACK(read_callback);
+	CALLBACK(read_callback);
 	/** callback for close */
-	 CALLBACK(close_callback);
+	CALLBACK(close_callback);
 	/** callback for accept */
-	 CALLBACK(accept_callback);
+	CALLBACK(accept_callback);
 	/** callback for connect */
-	 CALLBACK(connect_callback);
+	CALLBACK(connect_callback);
 	/** user data for this element*/
 	void *data;
 	/** epoll events flags */
@@ -48,7 +48,7 @@ struct poll_event_element {
  * @brief poll event object 
  */
 struct poll_event {
-	/**
+	/*
 	 * timeout call back
      * when in an event loop it can return any non zero value to stop the eventloop
      */
