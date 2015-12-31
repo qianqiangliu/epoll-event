@@ -39,7 +39,7 @@ void connect_flood(int loop)
 		close(sockfd);
 	}
 	time_t end = clock();
-	double cost = (end - start) / CLOCKS_PER_SEC;
+	double cost = (double)(end - start) / CLOCKS_PER_SEC;
 
 	printf("connect: %d, cost %lf sec\n", loop, cost);
 }
