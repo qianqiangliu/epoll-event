@@ -1,5 +1,5 @@
-#ifndef _POLL_H
-#define _POLL_H
+#ifndef _POLL_H_
+#define _POLL_H_
 
 #include "uthash.h"
 #include <sys/epoll.h>
@@ -122,4 +122,4 @@ int poll_event_process(poll_event_t *);
  */
 void poll_event_loop(poll_event_t *);
 
-#endif
+#endif	/* _POLL_H_ */
